@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center" style="font-weight: bold; color: white;">{{ isEdit ? 'EDITAR CATEGORÍA' : 'AGREGAR CATEGORÍA' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Nombre de la categoría -->
+  <ion-item>
+    <ion-label position="stacked">Nombre de la categoría</ion-label>
+    <ion-input 
+      [(ngModel)]="categoryName" 
+      placeholder="Ej: Personal, Trabajo, Compras..."
+      type="text">
+    </ion-input>
+  </ion-item>
+
+  <!-- Selector de color -->
+  <ion-item class="ion-margin-top">
+    <ion-label position="stacked">Color</ion-label>
+    <div class="color-picker-container">
+      <input 
+        type="color" 
+        [(ngModel)]="categoryColor" 
+        class="color-input"
+      />
+      <div class="color-preview" [style.background-color]="categoryColor">
+        <span [style.color]="getContrastColor(categoryColor)">
+          {{ categoryColor }}
+        </span>
+      </div>
+    </div>
+  </ion-item>
+
+  <!-- Vista previa -->
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-subtitle>Vista previa de la categoría:</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-chip [style.background-color]="categoryColor">
+        <ion-label [style.color]="getContrastColor(categoryColor)">
+          {{ categoryName || 'Nombre de categoría' }}
+        </ion-label>
+      </ion-chip>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()">
+        Cancelar
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button 
+        color="primary" 
+        (click)="save()" 
+        [disabled]="!categoryName || categoryName.trim().length === 0">
+        <ion-icon slot="start" name="checkmark"></ion-icon>
+        {{ isEdit ? 'Guardar Cambios' : 'Crear Categoría' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,47 @@
+.color-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+    width: 100%;
+  }
+  
+  .color-input {
+    width: 80px;
+    height: 50px;
+    border: 2px solid var(--ion-border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: 6px;
+    }
+  }
+  
+  .color-preview {
+    flex: 1;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    border: 2px solid var(--ion-border-color);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    span {
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      letter-spacing: 1px;
+    }
+  }
+  
+  ion-chip {
+    font-size: 16px;
+    padding: 12px 20px;
+  }

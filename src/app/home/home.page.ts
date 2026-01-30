@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TasksService } from '../core/services/tasks.service';
 import { CategoriesService } from '../core/services/categories.service';
@@ -16,7 +17,8 @@ import { ThemeService } from '../core/services/theme.service';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule
+    IonicModule,
+    RouterModule
   ],
 })
 export class HomePage implements OnInit {

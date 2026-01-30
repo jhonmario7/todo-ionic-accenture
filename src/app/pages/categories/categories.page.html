@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center" style="font-weight: bold; color: white;">
+      GESTION DE CATEGORIAS
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Lista de categorías -->
+  <ion-list>
+    <ion-item *ngFor="let category of categories; trackBy: trackByCategoryId">
+      
+      <!-- Indicador de color -->
+      <div slot="start" 
+           [style.background-color]="category.color" 
+           style="width: 30px; height: 30px; border-radius: 50%;">
+      </div>
+
+      <ion-label>
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.color }}</p>
+      </ion-label>
+
+      <!-- Botones de acción -->
+      <ion-button slot="end" fill="clear" (click)="editCategoryPrompt(category)">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button slot="end" fill="clear" color="danger" (click)="deleteCategoryPrompt(category)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+
+    </ion-item>
+
+    <!-- Mensaje si no hay categorías -->
+    <ion-item *ngIf="categories.length === 0" lines="none">
+      <ion-label class="ion-text-center ion-padding">
+        <p>No hay categorías. ¡Agrega una usando el botón +!</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Botón flotante para agregar categoría -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addCategoryPrompt()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
