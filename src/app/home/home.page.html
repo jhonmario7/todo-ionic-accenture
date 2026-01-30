@@ -4,8 +4,8 @@
       TO-DO APP - VERSION 1.0.0
     </ion-title>
     <ion-buttons slot="end">
-      <!-- Botón para ir a Categorías -->
-      <ion-button routerLink="/categories" title="CATEGORIAS">
+      <!-- Botón para ir a Categorías (solo si feature flag está habilitado) -->
+      <ion-button *ngIf="categoriesEnabled" routerLink="/categories">
         <ion-icon slot="icon-only" name="pricetags-outline"></ion-icon>
       </ion-button>
       <!-- Botón para alternar entre claro/oscuro -->
@@ -19,7 +19,7 @@
 <ion-content [fullscreen]="true">
 
   <!-- Filtro por categoría -->
-  <ion-segment [(ngModel)]="filterCategoryId" mode="md">
+  <ion-segment *ngIf="categoriesEnabled" [(ngModel)]="filterCategoryId" mode="md">
     <ion-segment-button value="all">
       <ion-label>Todas</ion-label>
     </ion-segment-button>
@@ -40,7 +40,7 @@
         </ion-input>
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item *ngIf="categoriesEnabled" lines="none">
         <ion-label>Categoría:</ion-label>
         <ion-select [(ngModel)]="selectedCategoryId" interface="popover">
           <ion-select-option *ngFor="let cat of categories" [value]="cat.id">

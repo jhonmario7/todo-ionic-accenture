@@ -8,6 +8,7 @@ import { CategoriesService } from '../core/services/categories.service';
 import { Task } from '../core/models/task.model';
 import { Category } from '../core/models/category.model';
 import { ThemeService } from '../core/services/theme.service';
+import { RemoteConfigService } from '../core/services/remote-config.service';
 
 @Component({
   selector: 'app-home',
@@ -33,18 +34,28 @@ export class HomePage implements OnInit {
   // Para filtro
   filterCategoryId: string = 'all';
 
+  // Para categorías
+  categoriesEnabled: boolean = true;
+
   constructor(
     private tasksService: TasksService,
     private categoriesService: CategoriesService,
     private themeService: ThemeService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private remoteConfigService: RemoteConfigService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // Obtener valor del feature flag
+    this.categoriesEnabled = await this.remoteConfigService.getCategoriesEnabled();
+    console.log('Feature flag - Categories enabled:', this.categoriesEnabled);
+  
+    // Suscribirse a los cambios de tareas
     this.tasksService.tasks$.subscribe(tasks => {
       this.tasks = tasks;
     });
-
+  
+    // Suscribirse a los cambios de categorías
     this.categoriesService.categories$.subscribe(categories => {
       this.categories = categories;
       if (categories.length > 0 && !this.selectedCategoryId) {
@@ -52,6 +63,7 @@ export class HomePage implements OnInit {
       }
     });
   }
+  
 
 /* Formatear fecha: Lunes, Enero, 30, 2026 */
 getFormattedDate(timestamp: number): string {
