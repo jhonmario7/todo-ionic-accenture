@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title class="ion-text-center" style="font-weight: bold; color: white;">
-      TO-DO Personal Version 1.0.0
+      TO-DO APP - VERSION 1.0.0
     </ion-title>
     <ion-buttons slot="end">
       <!-- Botón para ir a Categorías -->
-      <ion-button routerLink="/categories">
+      <ion-button routerLink="/categories" title="CATEGORIAS">
         <ion-icon slot="icon-only" name="pricetags-outline"></ion-icon>
       </ion-button>
       <!-- Botón para alternar entre claro/oscuro -->
@@ -31,9 +31,12 @@
   <!-- Formulario para agregar tarea -->
   <ion-card>
     <ion-card-content>
-      <ion-item lines="none">
-        <ion-input [(ngModel)]="newTaskTitle" placeholder="Escribe la tarea que quieres agregar."
-          (keyup.enter)="addTask()">
+      <ion-item lines="none" class="input-wrapper">
+        <ion-input 
+          [(ngModel)]="newTaskTitle" 
+          placeholder="Escribe la tarea que quieres agregar."
+          (keyup.enter)="addTask()"
+          fill="outline">
         </ion-input>
       </ion-item>
 
@@ -53,24 +56,50 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Tarjeta con consejo -->
+  <ion-card class="tip-card" *ngIf="getFilteredTasks().length > 0">
+    <ion-card-content class="ion-text-center">
+      <ion-text color="medium">
+        <p class="tip-message">
+          <strong>ACLARACIÓN:</strong> Desliza o usa el ícono <ion-icon name="trash-outline"></ion-icon> para eliminar
+          tareas.
+        </p>
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Lista de tareas -->
   <ion-list>
-    <ion-item-sliding *ngFor="let task of getFilteredTasks(); trackBy: trackByTaskId">
+    <ion-item-sliding *ngFor="let task of getFilteredTasks(); trackBy: trackByTaskId"
+      (ionSwipe)="confirmDelete(task.id)">
 
       <!-- Contenido de la tarea -->
-      <ion-item>
+      <ion-item [class.item-completed]="task.completed">
+
+        <!-- Checkbox de la tarea -->
         <ion-checkbox slot="start" [checked]="task.completed" (ionChange)="toggleTask(task.id)">
         </ion-checkbox>
 
+        <!-- Etiqueta de la tarea -->
         <ion-label [class.task-completed]="task.completed">
           <h2>{{ task.title }}</h2>
-          <p>{{ getCategoryName(task.categoryId) }}</p>
+          <p>{{ getCategoryName(task.categoryId) | uppercase }} - {{ getFormattedDate(task.createdAt) }}</p>
         </ion-label>
+
+        <!-- Círculo de color de la categoría -->
+        <div slot="start" [style.background-color]="getCategoryColor(task.categoryId)"
+          style="width: 24px; height: 24px; border-radius: 50%; margin-right: 12px; flex-shrink: 0;">
+        </div>
+
+        <!-- Botón visible siempre -->
+        <ion-button slot="end" fill="clear" color="danger" (click)="confirmDelete(task.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
-      <!-- Botón deslizable para eliminar -->
+      <!-- Opciones deslizables -->
       <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="deleteTask(task.id)">
+        <ion-item-option color="danger" expandable>
           <ion-icon slot="icon-only" name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>

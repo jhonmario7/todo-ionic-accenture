@@ -4,6 +4,93 @@
   opacity: 0.6;
 }
 
+/* Estilo para el item completado */
+.item-completed {
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  
+  --background: var(--ion-color-light);
+
+  border-left: 4px solid var(--ion-color-success);
+
+  --box-shadow: none;
+}
+
+/* Estilo para el label dentro del item completado */
+.item-completed .task-completed {
+  text-decoration: line-through;
+  color: var(--ion-color-medium);
+}
+
+/* El checkbox se mantiene visible */
+.item-completed ion-checkbox {
+  opacity: 1;
+}
+
+/* El botón de eliminar un poco más visible */
+.item-completed ion-button {
+  opacity: 0.8;
+}
+
+/* El círculo de color un poco transparente */
+.item-completed div[slot="start"] {
+  opacity: 0.6;
+}
+
+
+/* Mantener el label con su estilo */ 
+.item-completed .task-completed {
+  text-decoration: line-through;
+}
+
+.task-date {
+  font-size: 0.7rem;
+  color: var(--ion-color-medium);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-style: italic;
+  
+  ion-icon {
+    vertical-align: middle;
+    font-size: 0.9rem;
+  }
+}
+
+// Cuando la tarea está completada
+.task-completed .task-date {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* Estilo para el input de nueva tarea */
+.input-wrapper {
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 12px;
+
+  ion-input {
+    --background: var(--ion-color-light);
+    --border-color: var(--ion-color-medium);
+    --border-radius: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    border: 2px solid var(--ion-color-medium);
+    border-radius: 12px;
+    
+    &:focus-within {
+      --border-color: var(--ion-color-primary);
+      border-color: var(--ion-color-primary);
+      box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.1);
+    }
+  }
+}
+
 /* Espaciado del segmento */
 ion-segment {
   margin: 10px;
@@ -12,4 +99,148 @@ ion-segment {
 /* Espaciado de la card */
 ion-card {
   margin: 10px;
+}
+
+/* Segmento con scroll horizontal */
+ion-segment {
+  margin: 10px;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  
+  &::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 3px;
+  }
+}
+
+/* Estilo para tareas completadas */
+.task-completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Espaciado de la card */
+ion-card {
+  margin: 10px;
+}
+
+/* Segmento con scroll horizontal */
+ion-segment {
+  margin: 10px;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; 
+  scroll-behavior: smooth; 
+  
+  /* Estilos para el scrollbar */
+  &::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 3px;
+  }
+}
+
+/* Estilos base para los botones */
+ion-segment-button {
+  min-width: fit-content;
+  flex-shrink: 0; 
+  flex-grow: 0; 
+  padding: 0 12px;
+  
+  ion-label {
+    font-size: 14px; 
+    white-space: nowrap; 
+    padding: 0 6px;
+    overflow: visible;
+  }
+}
+
+
+/* Estilo para la tarjeta de consejo */
+.tip-card {
+  margin: 8px 16px;
+  box-shadow: none;
+  border: 1px dashed var(--ion-color-medium);
+  background: var(--ion-color-light);
+}
+
+/* Estilo para el mensaje de consejo */
+.tip-message {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ion-color-medium-shade);
+  
+  strong {
+    color: var(--ion-color-primary);
+  }
+}
+
+
+/* Pantallas grandes (tablets, landscape) - 768px+ */
+@media (min-width: 768px) {
+  ion-segment-button {
+    padding: 0 16px;
+    
+    ion-label {
+      font-size: 15px;
+      padding: 0 8px;
+    }
+  }
+}
+
+/* Pantallas medianas (Pixel 7 Pro, etc) - 420px a 767px */
+@media (min-width: 420px) and (max-width: 767px) {
+  ion-segment-button {
+    padding: 0 14px;
+    
+    ion-label {
+      font-size: 14px;
+      padding: 0 6px;
+    }
+  }
+}
+
+/* iPhone 14 Pro y similares - 390px a 419px */
+@media (min-width: 390px) and (max-width: 419px) {
+  ion-segment-button {
+    padding: 0 10px;
+    
+    ion-label {
+      font-size: 12px;
+      padding: 0 4px;
+    }
+  }
+}
+
+/* Pantallas pequeñas (iPhone SE, etc) - 360px a 389px */
+@media (min-width: 360px) and (max-width: 389px) {
+  ion-segment-button {
+    padding: 0 8px;
+    
+    ion-label {
+      font-size: 11px;
+      padding: 0 3px;
+    }
+  }
+}
+
+/* Pantallas muy pequeñas - menos de 360px */
+@media (max-width: 359px) {
+  ion-segment-button {
+    padding: 0 6px;
+    
+    ion-label {
+      font-size: 10px;
+      padding: 0 2px;
+    }
+  }
 }

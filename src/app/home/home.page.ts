@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { TasksService } from '../core/services/tasks.service';
 import { CategoriesService } from '../core/services/categories.service';
 import { Task } from '../core/models/task.model';
@@ -36,16 +36,15 @@ export class HomePage implements OnInit {
   constructor(
     private tasksService: TasksService,
     private categoriesService: CategoriesService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
-    // Suscribirse a los cambios de tareas
     this.tasksService.tasks$.subscribe(tasks => {
       this.tasks = tasks;
     });
 
-    // Suscribirse a los cambios de categorías
     this.categoriesService.categories$.subscribe(categories => {
       this.categories = categories;
       if (categories.length > 0 && !this.selectedCategoryId) {
@@ -53,6 +52,31 @@ export class HomePage implements OnInit {
       }
     });
   }
+
+/* Formatear fecha: Lunes, Enero, 30, 2026 */
+getFormattedDate(timestamp: number): string {
+  const date = new Date(timestamp);
+  
+  // Obtener partes de la fecha
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    year: 'numeric', 
+    month: 'long',
+    day: 'numeric'
+  };
+  
+  const parts = new Intl.DateTimeFormat('es-ES', options).formatToParts(date);
+  
+  const weekday = parts.find(p => p.type === 'weekday')?.value || '';
+  const month = parts.find(p => p.type === 'month')?.value || '';
+  const day = parts.find(p => p.type === 'day')?.value || '';
+  const year = parts.find(p => p.type === 'year')?.value || '';
+  
+  // Capitalizar primera letra
+  const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+  
+  return `${capitalize(weekday)}, ${capitalize(month)} ${day}, ${year}`;
+}
 
   /* Agregar nueva tarea */
   async addTask() {
@@ -70,6 +94,31 @@ export class HomePage implements OnInit {
   /* Eliminar tarea */
   async deleteTask(taskId: string) {
     await this.tasksService.deleteTask(taskId);
+  }
+
+  /* Confirmar eliminación */
+  async confirmDelete(taskId: string) {
+    const alert = await this.alertController.create({
+      header: 'ELIMINAR TAREA:',
+      message: '¿Estás seguro de que deseas eliminar esta tarea?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          cssClass: 'danger',
+          handler: () => {
+            this.deleteTask(taskId);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   /* Obtener tareas filtradas */
@@ -91,7 +140,6 @@ export class HomePage implements OnInit {
     return task.id;
   }
 
-
   /* Toggle tema claro/oscuro */
   toggleTheme() {
     this.themeService.toggleDarkMode();
@@ -100,5 +148,11 @@ export class HomePage implements OnInit {
   /* Obtener estado del tema */
   get isDarkMode(): boolean {
     return this.themeService.isDarkMode();
+  }
+
+  /* Obtener color de categoría por ID */
+  getCategoryColor(categoryId: string): string {
+    const category = this.categoriesService.getCategoryById(categoryId);
+    return category?.color || '#999999'; // Color gris por defecto si no tiene
   }
 }
