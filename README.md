@@ -141,6 +141,6 @@ Firebase Remote Config permite controlar funcionalidades sin redesplegar la apli
 
 ```bash
 Autor
-Jhon Mario
+Jhon Mario Rodriguez Ramirez
 Prueba Técnica - Accenture Latinoamérica
 ``` 
