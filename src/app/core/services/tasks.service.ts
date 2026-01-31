@@ -8,40 +8,60 @@ import { StorageService } from './storage.service';
 })
 export class TasksService {
   
-  // Guarda el estado actual de las tareas y notifica a los componentes cuando cambian
+  /* Guarda el estado actual de las tareas y notifica a los componentes cuando cambian */
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   
-  // Observable público para que los componentes se suscriban y reciban cambios automáticamente
+  /* Observable público para que los componentes se suscriban y reciban cambios automáticamente */
   public tasks$: Observable<Task[]> = this.tasksSubject.asObservable();
 
+  /* Clave para almacenar las tareas en el storage */
   private readonly STORAGE_KEY = 'tasks'; 
 
   constructor(private storageService: StorageService) {
     this.loadTasks(); 
   }
 
-  /* Carga las tareas desde el storage al iniciar */
+  /**
+   * @method loadTasks
+   * @funcionalidad Se encarga de cargar las tareas desde el storage al iniciar
+   * @returns Promise<void>
+   */
   async loadTasks() {
     const tasks = await this.storageService.get(this.STORAGE_KEY);
     this.tasksSubject.next(tasks || []); 
   }
 
-  /* Guarda las tareas actuales en el storage */
+  /**
+   * @method saveTasks
+   * @funcionalidad Se encarga de guardar las tareas en el storage
+   * @param tasks - Las tareas a guardar
+   * @returns Promise<void>
+   */
   private async saveTasks(tasks: Task[]) {
     await this.storageService.set(this.STORAGE_KEY, tasks);
     this.tasksSubject.next(tasks); 
   }
 
-  /* Obtiene todas las tareas (snapshot actual, sin suscripción) */
+  /**
+   * @method getTasks
+   * @funcionalidad Se encarga de obtener todas las tareas (snapshot actual, sin suscripción)
+   * @returns Task[]
+   */
   getTasks(): Task[] {
     return this.tasksSubject.value;
   }
 
-  /* Agrega una nueva tarea */
+  /**
+   * @method addTask
+   * @funcionalidad Se encarga de agregar una nueva tarea
+   * @param title - El título de la tarea
+   * @param categoryId - El ID de la categoría
+   * @returns Promise<void>
+   */
   async addTask(title: string, categoryId: string) {
     const tasks = this.getTasks();
     const newTask: Task = {
-      id: Date.now().toString(), // ID único basado en timestamp
+      id: Date.now().toString(), 
       title: title.trim(),
       completed: false,
       categoryId: categoryId,
@@ -51,7 +71,12 @@ export class TasksService {
     await this.saveTasks(tasks); 
   }
 
-  /* Actualiza una tarea existente */
+  /**
+   * @method updateTask
+   * @funcionalidad Se encarga de actualizar una tarea existente
+   * @param updatedTask - La tarea actualizada
+   * @returns Promise<void>
+   */
   async updateTask(updatedTask: Task) {
     const tasks = this.getTasks();
     const index = tasks.findIndex(t => t.id === updatedTask.id);
@@ -61,7 +86,12 @@ export class TasksService {
     }
   }
 
-  /* Marca una tarea como completada/pendiente (toggle) */
+  /**
+   * @method toggleComplete
+   * @funcionalidad Se encarga de marcar una tarea como completada/pendiente (toggle)
+   * @param taskId - El ID de la tarea
+   * @returns Promise<void>
+   */
   async toggleComplete(taskId: string) {
     const tasks = this.getTasks();
     const task = tasks.find(t => t.id === taskId);
@@ -71,14 +101,24 @@ export class TasksService {
     }
   }
 
-  /* Elimina una tarea */
+  /**
+   * @method deleteTask
+   * @funcionalidad Se encarga de eliminar una tarea
+   * @param taskId - El ID de la tarea
+   * @returns Promise<void>
+   */
   async deleteTask(taskId: string) {
     const tasks = this.getTasks();
     const filteredTasks = tasks.filter(t => t.id !== taskId);
     await this.saveTasks(filteredTasks);
   }
 
-  /* Filtra tareas por categoría */
+  /**
+   * @method getTasksByCategory
+   * @funcionalidad Se encarga de filtrar tareas por categoría
+   * @param categoryId - El ID de la categoría
+   * @returns Task[]
+   */
   getTasksByCategory(categoryId: string): Task[] {
     return this.getTasks().filter(t => t.categoryId === categoryId);
   }

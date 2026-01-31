@@ -78,6 +78,27 @@ ionic cordova build ios
 ```
 Nota: La compilación iOS requiere macOS con Xcode. Como alternativa se puede usar Ionic Appflow para builds en la nube.
 
+### Limitación técnica - Build iOS
+
+El archivo IPA para iOS no fue generado debido a las siguientes restricciones:
+
+1. **Requiere hardware Apple**: La compilación de aplicaciones iOS requiere macOS con Xcode instalado
+2. **Certificados de desarrollador**: Se necesita una cuenta de Apple Developer ($99/año) para firmar apps
+3. **Alternativa cloud**: Ionic Appflow soporta builds iOS en la nube, pero requiere plan de pago
+
+El proyecto está completamente preparado para compilación iOS:
+- `config.xml` incluye configuración iOS
+- Iconos y splash screens definidos
+- Plugins compatibles con iOS
+
+**Instrucciones para generar IPA con acceso a macOS**:
+```bash
+ionic cordova platform add ios
+ionic cordova build ios --release
+# Abrir Xcode para firmar y exportar IPA
+open platforms/ios/*.xcworkspace
+```
+
 ## Firebase Remote Config
 
 La aplicación utiliza Firebase Remote Config con el parámetro enableCategories para controlar la visibilidad del módulo de categorías.

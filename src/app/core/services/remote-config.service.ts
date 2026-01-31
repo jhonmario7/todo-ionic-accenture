@@ -15,27 +15,31 @@ export class RemoteConfigService {
     this.initializeRemoteConfig();
   }
 
-  /* Inicializa Firebase y Remote Config */
+  /**
+   * @method initializeRemoteConfig
+   * @funcionalidad Se encarga de inicializar Firebase y Remote Config
+   * @returns Promise<void>
+   */
   private async initializeRemoteConfig() {
     try {
-      // Inicializar Firebase
+      /* Inicializar Firebase */
       const app = initializeApp(firebaseConfig);
       
-      // Obtener instancia de Remote Config
+      /* Obtener instancia de Remote Config */
       this.remoteConfig = getRemoteConfig(app);
       
-      // Configurar tiempo de caché (en producción usar 12 horas, en dev 0 para testing)
+      /* Configurar tiempo de caché (en producción usar 12 horas, en dev 0 para testing) */
       this.remoteConfig.settings = {
-        minimumFetchIntervalMillis: 0, // 0 = sin caché (solo para desarrollo)
-        fetchTimeoutMillis: 60000 // 60 segundos de timeout
+        minimumFetchIntervalMillis: 0, 
+        fetchTimeoutMillis: 60000 
       };
 
-      // Valores por defecto (si Firebase no está disponible)
+      /* Valores por defecto (si Firebase no está disponible) */
       this.remoteConfig.defaultConfig = {
         enableCategories: 'true'
       };
 
-      // Obtener valores del servidor
+      /* Obtener valores del servidor */
       await fetchAndActivate(this.remoteConfig);
       
       this.initialized = true;
@@ -45,7 +49,11 @@ export class RemoteConfigService {
     }
   }
 
-  /* Obtener valor del parámetro enableCategories */
+  /**
+   * @method getCategoriesEnabled
+   * @funcionalidad Se encarga de obtener el valor del parámetro enableCategories
+   * @returns Promise<boolean>
+   */
   async getCategoriesEnabled(): Promise<boolean> {
     if (!this.initialized) {
       await this.waitForInitialization();
@@ -56,11 +64,15 @@ export class RemoteConfigService {
       return value.asString() === 'true';
     } catch (error) {
       console.error('Error al obtener enableCategories:', error);
-      return true; // Por defecto habilitado si hay error
+      return true; 
     }
   }
 
-  /* Esperar a que Remote Config esté inicializado */
+  /**
+   * @method waitForInitialization
+   * @funcionalidad Se encarga de esperar a que Remote Config esté inicializado
+   * @returns Promise<void>
+   */
   private async waitForInitialization(): Promise<void> {
     let attempts = 0;
     while (!this.initialized && attempts < 20) {
@@ -69,7 +81,11 @@ export class RemoteConfigService {
     }
   }
 
-  /* Forzar refetch de valores (útil para testing) */
+  /**
+   * @method refresh
+   * @funcionalidad Se encarga de forzar refetch de valores (útil para testing)
+   * @returns Promise<void>
+   */
   async refresh(): Promise<void> {
     if (this.remoteConfig) {
       await fetchAndActivate(this.remoteConfig);

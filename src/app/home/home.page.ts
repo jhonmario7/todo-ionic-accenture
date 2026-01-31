@@ -65,7 +65,13 @@ export class HomePage implements OnInit {
   }
   
 
-/* Formatear fecha: Lunes, Enero, 30, 2026 */
+ 
+/**
+ * @method getFormattedDate
+ * @funcionalidad Se encarga de formatear la fecha
+ * @param timestamp - El timestamp de la fecha
+ * @returns string
+ */
 getFormattedDate(timestamp: number): string {
   const date = new Date(timestamp);
   
@@ -90,7 +96,11 @@ getFormattedDate(timestamp: number): string {
   return `${capitalize(weekday)}, ${capitalize(month)} ${day}, ${year}`;
 }
 
-  /* Agregar nueva tarea */
+  /**
+   * @method addTask
+   * @funcionalidad Se encarga de agregar una nueva tarea
+   * @returns Promise<void>
+   */
   async addTask() {
     if (this.newTaskTitle.trim().length > 0) {
       await this.tasksService.addTask(this.newTaskTitle, this.selectedCategoryId);
@@ -98,17 +108,32 @@ getFormattedDate(timestamp: number): string {
     }
   }
 
-  /* Alternar completado de tarea */
+  /**
+   * @method toggleTask
+   * @funcionalidad Se encarga de alternar el estado de completado de una tarea
+   * @param taskId - El ID de la tarea
+   * @returns Promise<void>
+   */
   async toggleTask(taskId: string) {
     await this.tasksService.toggleComplete(taskId);
   }
 
-  /* Eliminar tarea */
+  /**
+   * @method deleteTask
+   * @funcionalidad Se encarga de eliminar una tarea
+   * @param taskId - El ID de la tarea
+   * @returns Promise<void>
+   */
   async deleteTask(taskId: string) {
     await this.tasksService.deleteTask(taskId);
   }
 
-  /* Confirmar eliminación */
+  /**
+   * @method confirmDelete
+   * @funcionalidad Se encarga de confirmar la eliminación de una tarea
+   * @param taskId - El ID de la tarea
+   * @returns Promise<void>
+   */
   async confirmDelete(taskId: string) {
     const alert = await this.alertController.create({
       header: 'ELIMINAR TAREA:',
@@ -133,7 +158,11 @@ getFormattedDate(timestamp: number): string {
     await alert.present();
   }
 
-  /* Obtener tareas filtradas */
+  /**
+   * @method getFilteredTasks
+   * @funcionalidad Se encarga de obtener las tareas filtradas
+   * @returns Task[]
+   */
   getFilteredTasks(): Task[] {
     if (this.filterCategoryId === 'all') {
       return this.tasks;
@@ -141,28 +170,51 @@ getFormattedDate(timestamp: number): string {
     return this.tasks.filter(t => t.categoryId === this.filterCategoryId);
   }
 
-  /* Obtener nombre de categoría por ID */
+  /**
+   * @method getCategoryName
+   * @funcionalidad Se encarga de obtener el nombre de una categoría por ID
+   * @param categoryId - El ID de la categoría
+   * @returns string
+   */
   getCategoryName(categoryId: string): string {
     const category = this.categoriesService.getCategoryById(categoryId);
     return category ? category.name : 'Sin categoría';
   }
 
-  /* TrackBy para optimización de renderizado */
+  /**
+   * @method trackByTaskId
+   * @funcionalidad Se encarga de optimizar el renderizado de las tareas
+   * @param index - El índice de la tarea
+   * @param task - La tarea
+   * @returns string
+   */
   trackByTaskId(index: number, task: Task): string {
     return task.id;
   }
 
-  /* Toggle tema claro/oscuro */
+  /**
+   * @method toggleTheme
+   * @funcionalidad Se encarga de alternar el tema claro/oscuro
+   */
   toggleTheme() {
     this.themeService.toggleDarkMode();
   }
 
-  /* Obtener estado del tema */
+  /**
+   * @method isDarkMode
+   * @funcionalidad Se encarga de obtener el estado del tema
+   * @returns boolean
+   */
   get isDarkMode(): boolean {
     return this.themeService.isDarkMode();
   }
 
-  /* Obtener color de categoría por ID */
+  /**
+   * @method getCategoryColor
+   * @funcionalidad Se encarga de obtener el color de una categoría por ID
+   * @param categoryId - El ID de la categoría
+   * @returns string
+   */
   getCategoryColor(categoryId: string): string {
     const category = this.categoriesService.getCategoryById(categoryId);
     return category?.color || '#999999'; // Color gris por defecto si no tiene

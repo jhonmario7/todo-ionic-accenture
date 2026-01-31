@@ -20,7 +20,11 @@ export class CategoriesService {
     this.loadCategories();
   }
 
-  /* Carga las categorías desde el storage al iniciar */
+  /**
+   * @method loadCategories
+   * @funcionalidad Se encarga de cargar las categorías desde el storage al iniciar
+   * @returns Promise<void>
+   */
   async loadCategories() {
     const categories = await this.storageService.get(this.STORAGE_KEY);
     
@@ -31,7 +35,11 @@ export class CategoriesService {
     }
   }
 
-  /* Inicializa categorías por defecto si no hay ninguna */
+  /**
+   * @method initializeDefaultCategories
+   * @funcionalidad Se encarga de inicializar categorías por defecto si no hay ninguna
+   * @returns Promise<void>
+   */
   private async initializeDefaultCategories() {
     const defaultCategories: Category[] = [
       { id: 'personal', name: 'Personal', color: '#3880ff' },
@@ -41,23 +49,43 @@ export class CategoriesService {
     await this.saveCategories(defaultCategories);
   }
 
-  /* Guarda las categorías en el storage */
+  /**
+   * @method saveCategories
+   * @funcionalidad Se encarga de guardar las categorías en el storage
+   * @param categories - Las categorías a guardar
+   * @returns Promise<void>
+   */
   private async saveCategories(categories: Category[]) {
     await this.storageService.set(this.STORAGE_KEY, categories);
     this.categoriesSubject.next(categories);
   }
 
-  /* Obtiene todas las categorías (snapshot actual) */
+  /**
+   * @method getCategories
+   * @funcionalidad Se encarga de obtener todas las categorías (snapshot actual)
+   * @returns Category[]
+   */
   getCategories(): Category[] {
     return this.categoriesSubject.value;
   }
 
-  /* Obtiene una categoría por ID */
+  /**
+   * @method getCategoryById
+   * @funcionalidad Se encarga de obtener una categoría por ID
+   * @param id - El ID de la categoría
+   * @returns Category | undefined
+   */
   getCategoryById(id: string): Category | undefined {
     return this.getCategories().find(c => c.id === id);
   }
 
-  /* Agrega una nueva categoría */
+  /**
+   * @method addCategory
+   * @funcionalidad Se encarga de agregar una nueva categoría
+   * @param name - El nombre de la categoría
+   * @param color - El color de la categoría
+   * @returns Promise<void>
+   */
   async addCategory(name: string, color?: string) {
     const categories = this.getCategories();
     const newCategory: Category = {
@@ -69,7 +97,12 @@ export class CategoriesService {
     await this.saveCategories(categories);
   }
 
-  /* Actualiza una categoría existente */
+  /**
+   * @method updateCategory
+   * @funcionalidad Se encarga de actualizar una categoría existente
+   * @param updatedCategory - La categoría actualizada
+   * @returns Promise<void>
+   */
   async updateCategory(updatedCategory: Category) {
     const categories = this.getCategories();
     const index = categories.findIndex(c => c.id === updatedCategory.id);
@@ -79,7 +112,12 @@ export class CategoriesService {
     }
   }
 
-  /* Elimina una categoría */
+  /**
+   * @method deleteCategory
+   * @funcionalidad Se encarga de eliminar una categoría
+   * @param categoryId - El ID de la categoría
+   * @returns Promise<void>
+   */
   async deleteCategory(categoryId: string) {
     const categories = this.getCategories();
     const filteredCategories = categories.filter(c => c.id !== categoryId);

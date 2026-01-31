@@ -27,12 +27,18 @@ export class CategoryFormComponent implements OnInit {
     }
   }
 
-  /* Cerrar modal */
+  /**
+   * @method dismiss
+   * @funcionalidad Se encarga de cerrar el modal
+   */
   dismiss() {
     this.modalController.dismiss(null, 'cancel');
   }
 
-  /* Guardar categoría */
+  /**
+   * @method save
+   * @funcionalidad Se encarga de guardar la categoría
+   */
   save() {
     if (this.categoryName.trim().length > 0) {
       this.modalController.dismiss({
@@ -42,7 +48,12 @@ export class CategoryFormComponent implements OnInit {
     }
   }
 
-  // Calcular color de texto contrastante para la vista previa
+  /**
+   * @method getContrastColor
+   * @funcionalidad Se encarga de calcular el color de texto contrastante para la vista previa
+   * @param hexColor - El color hexadecimal
+   * @returns string
+   */
   getContrastColor(hexColor: string): string {
     const hex = hexColor.replace('#', '');
     const r = parseInt(hex.substr(0, 2), 16);

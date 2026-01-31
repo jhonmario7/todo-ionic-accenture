@@ -8,22 +8,29 @@ export class ThemeService {
   private darkMode: boolean = false;
 
   constructor() {
-    // Cargar preferencia guardada o detectar preferencia del sistema
+    /* Cargar preferencia guardada o detectar preferencia del sistema */
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     const savedTheme = localStorage.getItem('darkMode');
 
+    /* Establecer estado inicial del tema */
     this.darkMode = savedTheme ? savedTheme === 'true' : prefersDark.matches;
     this.applyTheme();
   }
 
-  /* Alternar entre claro/oscuro */
+  /**
+   * @method toggleDarkMode
+   * @funcionalidad Se encarga de alternar entre claro/oscuro
+   */
   toggleDarkMode() {
     this.darkMode = !this.darkMode;
     this.applyTheme();
     localStorage.setItem('darkMode', this.darkMode.toString());
   }
 
-  /* Aplicar tema al html */
+  /**
+   * @method applyTheme
+   * @funcionalidad Se encarga de aplicar el tema al html
+   */
   private applyTheme() {
     const prefersDark = this.darkMode;
     document.body.classList.toggle('ion-palette-dark', prefersDark);
@@ -36,7 +43,11 @@ export class ThemeService {
     }
   }
 
-  /* Obtener estado actual */
+  /**
+   * @method isDarkMode
+   * @funcionalidad Se encarga de obtener el estado actual
+   * @returns boolean
+   */
   isDarkMode(): boolean {
     return this.darkMode;
   }
